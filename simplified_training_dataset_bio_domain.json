@@ -1,0 +1,181 @@
+[
+    {
+        "text": "Which specimens have a predecessor organism?",
+        "queries": [
+            "MATCH s[Specimen] >[predecessor] o[SUB_CLASS_OF(Organism)]\nRETURN s"
+        ]
+    },
+    {
+        "text": "Which organisms consume both a specimen and a species?",
+        "queries": [
+            "MATCH o[SUB_CLASS_OF(Organism)] >[consumes] s[Specimen]\nMATCH o >[consumes] sp[SUB_CLASS_OF(Species)]\nRETURN o",
+            "MATCH sp[SUB_CLASS_OF(Species)] >[consumed_by] o[SUB_CLASS_OF(Organism)] >[consumes] s[Specimen]\nRETURN o",
+            "MATCH s[Specimen] >[consumed_by] o[SUB_CLASS_OF(Organism)] >[consumes] sp[SUB_CLASS_OF(Species)]\nRETURN o"
+        ]
+    },
+    {
+        "text": "Which ecosystems are dominated by keystone species that consume specimens?",
+        "queries": [
+            "MATCH s[Specimen] >[consumed_by] k[KeystoneSpecies] >[dominates] e[Ecosystem]\nRETURN e"
+        ]
+    },
+    {
+        "text": "Which individuals inhabit the biome where their ecosystem is located?",
+        "queries": [
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem] >[has_biome] b[Biome] >[located_in] r[Region]\nMATCH i >[resides_in] b2[Biome] >[located_in] r\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which organisms are symbiotic with keystone species?",
+        "queries": [
+            "MATCH o[SUB_CLASS_OF(Organism)] >[symbiotic_with] k[KeystoneSpecies]\nRETURN o"
+        ]
+    },
+    {
+        "text": "Which individuals belong to ecosystems dominated by one of their symbionts?",
+        "queries": [
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem] >[dominated_by] k[KeystoneSpecies] >[symbiotic_with] i\nRETURN i",
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem] >[dominated_by] k[KeystoneSpecies]\nMATCH i >[symbiotic_with] k\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which organisms consume specimens whose predecessor organism is one of their symbionts?",
+        "queries": [
+            "MATCH o1[SUB_CLASS_OF(Organism)] >[consumes] s[Specimen] >[predecessor] o2[SUB_CLASS_OF(Organism)] >[symbiotic_with] o1\nRETURN o1"
+        ]
+    },
+    {
+        "text": "Which individuals have symbionts belonging to the same ecosystem?",
+        "queries": [
+            "MATCH i1[Individual] >[belongs_to] e[Ecosystem]\nMATCH i1 >[symbiotic_with] i2[Individual] >[belongs_to] e\nRETURN i1"
+        ]
+    },
+    {
+        "text": "Which keystone species inhabit a different region from their ecosystem's primary biome?",
+        "queries": [
+            "MATCH k[KeystoneSpecies] >[dominates] e[Ecosystem] >[has_biome] b1[Biome] >[located_in] r1[Region]\nMATCH k >[resides_in] b2[Biome] >[located_in] r2[Region]\nREQUIRE r1 DIFFERENT_FROM r2 \nRETURN k"
+        ]
+    },
+    {
+        "text": "Which keystone species dominate ecosystems whose primary biome is located in the region where one of their symbionts resides?",
+        "queries": [
+            "MATCH k[KeystoneSpecies] >[dominates] e[Ecosystem] >[has_biome] b1[Biome] >[located_in] r1[Region]\nMATCH p[SUB_CLASS_OF(Organism)] >[resides_in] b2[Biome] >[located_in] r2[Region]\nMATCH p >[symbiotic_with] k\nREQUIRE r1 SAME_AS r2\nRETURN k",
+            "MATCH k[KeystoneSpecies] >[dominates] e[Ecosystem] >[has_biome] b1[Biome] >[located_in] r1[Region]\nMATCH p[SUB_CLASS_OF(Organism)] >[resides_in] b2[Biome] >[located_in] r1\nMATCH p >[symbiotic_with] k\nRETURN k",
+            "MATCH k[KeystoneSpecies] >[dominates] e[Ecosystem] >[has_biome] b1[Biome] >[located_in] r1[Region]\nMATCH k >[symbiotic_with] p[SUB_CLASS_OF(Organism)] >[resides_in] b2[Biome] >[located_in] r1\nRETURN k"
+        ]
+    },
+    {
+        "text": "Which organisms consume specimens previously consumed by an individual belonging to the same ecosystem?",
+        "queries": [
+            "MATCH s[Specimen] >[consumed_by] i1[Individual] >[belongs_to] e[Ecosystem]\nMATCH i2[Individual] >[belongs_to] e\nMATCH s >[predecessor] i2\nRETURN i1"
+        ]
+    },
+    {
+        "text": "Which individuals are symbionts of individuals of an allied ecosystem?",
+        "queries": [
+            "MATCH i1[Individual] >[belongs_to] e1[Ecosystem]\nMATCH i1 >[symbiotic_with] i2[Individual] >[belongs_to] e2[Ecosystem]\nMATCH e1 >[allied_with] e2\nREQUIRE e1 DIFFERENT_FROM e2\nRETURN i1, i2"
+        ]
+    },
+    {
+        "text": "Which species is consumed by an organism that has more than 500mg of glucose?",
+        "queries": [
+            "MATCH sp[SUB_CLASS_OF(Species)] >[consumed_by] o[SUB_CLASS_OF(Organism)] >[glucose_store] g[GlucoseStore]{amount>500}\nRETURN sp"
+        ]
+    },
+    {
+        "text": "Which organism consumes species of different taxonomies?",
+        "queries": [
+            "MATCH o[SUB_CLASS_OF(Organism)] >[consumes] sp1[SUB_CLASS_OF(Species)]\nMATCH o >[consumes] sp2[SUB_CLASS_OF(Species)]\nREQUIRE sp1 DISJOINT_CLASS_FROM sp2\nRETURN o"
+        ]
+    },
+    {
+        "text": "Which individuals have a genetic marker with a sequence code that starts with 'AT' and belong to an ecosystem in the producer trophic level?",
+        "queries": [
+            "MATCH i[Individual] >[genetic_marker] m[GeneticMarker]{sequence:PREFIX(AT)}\nMATCH i >[belongs_to] e[Ecosystem]{trophic_level:EXACT(\"producer\")}\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which regions have a biome type that is not the same as their region code 3?",
+        "queries": [
+            "MATCH r[Region]{biome_type:!EXACT(region_code_3)}\nRETURN r"
+        ]
+    },
+    {
+        "text": "Which individuals have a genetic marker with a sequence code that is not 'AT' and belong to an ecosystem in the producer trophic level?",
+        "queries": [
+            "MATCH i[Individual] >[genetic_marker] m[GeneticMarker]{sequence:!EXACT(AT)}\nMATCH i >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals have a genetic marker with a sequence code that ends with '1234' and belong to an ecosystem in the producer trophic level?",
+        "queries": [
+            "MATCH i[Individual] >[genetic_marker] m[GeneticMarker]{sequence:SUFFIX(1234)}\nMATCH i >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals do not have a genetic marker and belong to an ecosystem in the producer trophic level?",
+        "queries": [
+            "MATCH i[Individual] >[(NOT)genetic_marker] m[GeneticMarker]\nMATCH i >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals have a genetic marker with a sequence code that contains 'AT1234' and belong to an ecosystem in the producer trophic level?",
+        "queries": [
+            "MATCH i[Individual] >[genetic_marker] m[GeneticMarker]{sequence:CONTAINS(AT1234)}\nMATCH i >[belongs_to] e[Ecosystem]{trophic_level:EXACT(\"producer\")}\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals have a genetic marker with a sequence code that is not 'AT' or 'GC' and belong to an ecosystem in the producer trophic level?",
+        "queries": [
+            "MATCH i[Individual] >[genetic_marker] m[Genetic_marker]{sequence:!EXACT(AT),!EXACT(GC)}\nMATCH i >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals have a genetic marker with a sequence code that starts with 'AT' and belong to an ecosystem in the producer trophic level? Also, ensure that the individual's lineage is not Amazonian.",
+        "queries": [
+            "MATCH i[Individual] >[genetic_marker] m[GeneticMarker]{sequence:PREFIX(AT)}\nMATCH i >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nMATCH i >[has_lineage] l[Lineage]{name:!EXACT(Amazonian)}\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals belong to an ecosystem in the producer trophic level and have a biome located in the Amazon? Ensure that the individual's lineage is Amazonian, which is the same class as their biome region.",
+        "queries": [
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nMATCH i >[resides_in] b[Biome] >[located_in] r1[Region]{name:EXACT(Amazon)}\nMATCH i >[has_lineage] l2[Lineage]\nREQUIRE r1 SAME_CLASS_OF l2\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals belong to an ecosystem in the producer trophic level and have a biome located in the Amazon? Ensure that the individual's lineage is equivalent to their biome region.",
+        "queries": [
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nMATCH i >[resides_in] b[Biome] >[located_in] r1[Region]{name:EXACT(Amazon)}\nMATCH i >[has_lineage] l2[Lineage]\nREQUIRE r1 EQUIVALENT_CLASS_OF l2\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals belong to an ecosystem in the producer trophic level and have a biome located in the Amazon? Ensure that the individual's lineage is a subclass of their biome region.",
+        "queries": [
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nMATCH i >[resides_in] b[Biome] >[located_in] r1[Region]{name:EXACT(Amazon)}\nMATCH i >[has_lineage] l2[Lineage]\nREQUIRE l2 SUB_CLASS_OF r1\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals belong to an ecosystem in the producer trophic level and have a biome located in the Amazon? Ensure that the individual's lineage is a superclass of their biome region.",
+        "queries": [
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nMATCH i >[resides_in] b[Biome] >[located_in] r1[Region]{name:EXACT(Amazon)}\nMATCH i >[has_lineage] l2[Lineage]\nREQUIRE r1 SUPER_CLASS_OF l2\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals belong to an ecosystem in the producer trophic level and have a biome located in the Amazon? Ensure that the individual's lineage is disjoint from their biome region.",
+        "queries": [
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nMATCH i >[resides_in] b[Biome] >[located_in] r1[Region]{name:EXACT(Amazon)}\nMATCH i >[has_lineage] l2[Lineage]\nREQUIRE r1 DISJOINT_CLASS_FROM l2\nRETURN i"
+        ]
+    },
+    {
+        "text": "Which individuals belong to an ecosystem in the producer trophic level and have a biome located in the Amazon? Ensure that the individual's lineage is not Amazonian and they are different from their symbiont.",
+        "queries": [
+            "MATCH i1[Individual] >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nMATCH i1 >[resides_in] b[Biome] >[located_in] r[Region]{name:EXACT(Amazon)}\nMATCH i1 >[has_lineage] l[Lineage]{name:!EXACT(Amazonian)}\nMATCH i1 >[symbiotic_with] i2[Individual]\nREQUIRE i1 DIFFERENT_FROM i2\nRETURN i1"
+        ]
+    },
+    {
+        "text": "Which individuals belong to an ecosystem in the producer trophic level and have a biome located in the Amazon? Infer that the individual's lineage is Amazonian if their biome is in the Amazon.",
+        "queries": [
+            "MATCH i[Individual] >[belongs_to] e[Ecosystem]{trophic_level:EXACT(producer)}\nMATCH i >[resides_in] b[Biome] >[located_in] r[Region]{name:EXACT(Amazon)}\nINFER l[Lineage] AS r\nRETURN i,l"
+        ]
+    }
+]

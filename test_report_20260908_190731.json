@@ -1,0 +1,221 @@
+{
+    "summary": {
+        "total_tests": 14,
+        "exact_matches_count": 0,
+        "exact_match_rate": 0.0,
+        "average_db_score": 0.21428571428571427,
+        "average_elapsed_time_ms": 36.157376907999996
+    },
+    "details": [
+        {
+            "case_id": "test_0001",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which vehicles have a previous owner?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 39.04652087900104,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH v[Vehicle] >[previous_owner] p[Person] RETURN v"
+        },
+        {
+            "case_id": "test_0002",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own both a vehicle and an animal?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 33.94278828000097,
+            "error": null,
+            "generated_query": "MATCH p[Person] >[has_vehicle] v[Vehicle]\nMATCH p >[has_animal] a[Animal]\nRETURN p"
+        },
+        {
+            "case_id": "test_0003",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which companies are owned by people who own vehicles?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 33.14281975300037,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH p[CompanyOwner] >[owns_company] c[Company], p >[has_vehicle] v[Vehicle]\nRETURN c"
+        },
+        {
+            "case_id": "test_0004",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees live in the country where their company is located?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 50.76823173700177,
+            "error": null,
+            "generated_query": "MATCH e[Employee] >[resident_in] a1[Address] >[located_in] c[Country]\nMATCH co[Company] >[has_legal_office_in] a2[Address] >[located_in] c\nRETURN e"
+        },
+        {
+            "case_id": "test_0005",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people are friends with company owners?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 29.94376994200138,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH co[CompanyOwner] <-[friend_of]- p[Person]\nRETURN p"
+        },
+        {
+            "case_id": "test_0006",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees work for companies owned by one of their friends?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 35.2239477990006,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH e:Employee >[works_for] c:Company\nMATCH c >[company_owner] p:CompanyOwner\nMATCH e >[friend_of] p\nRETURN e"
+        },
+        {
+            "case_id": "test_0007",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own vehicles whose previous owner is one of their friends?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 36.041160368997225,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH p1:Person >[has_vehicle] v:Vehicle >[previous_owner] p2:Person, p1:Person >[friend_of] p2:Person\nRETURN p1"
+        },
+        {
+            "case_id": "test_0008",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees have partners working for the same company?",
+            "exact_match": false,
+            "score": 1.0,
+            "elapsed_time": 34.56749931499871,
+            "error": null,
+            "generated_query": "MATCH e1[Employee] >[has_relation_with] e2[Employee]\nMATCH e1 >[works_for] c[Company]\nMATCH e2 >[works_for] c\nRETURN e1"
+        },
+        {
+            "case_id": "test_0009",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which company owners live in a different country from their company's legal office?",
+            "exact_match": false,
+            "score": 1.0,
+            "elapsed_time": 36.49168410100174,
+            "error": null,
+            "generated_query": "MATCH o[CompanyOwner] >[owns_company] c[Company] >[has_legal_office_in] a1[Address] >[located_in] ct1[Country]\nMATCH o >[resident_in] a2[Address] >[located_in] ct2[Country]\nREQUIRE ct1 DIFFERENT_FROM ct2\nRETURN o"
+        },
+        {
+            "case_id": "test_0010",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own companies whose legal office is located in the country where one of their friends resides?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 39.90922337399752,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH owner:CompanyOwner >[owns_company] comp:Company >[has_legal_office_in] off:Address >[located_in] cty:Country\nMATCH owner >[friend_of] frd:Person >[resident_in] frd_addr:Address >[located_in] cty\nRETURN owner"
+        },
+        {
+            "case_id": "test_0011",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own vehicles previously owned by someone working for the same company?",
+            "exact_match": false,
+            "score": 1.0,
+            "elapsed_time": 37.193573853997805,
+            "error": null,
+            "generated_query": "MATCH v[Vehicle] >[vehicle_owned_by] p1[Person]\nMATCH v >[previous_owner] p2[Employee] >[works_for] c[Company]\nRETURN p1"
+        },
+        {
+            "case_id": "test_0012",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employee are friends of employees of a partner company?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 35.10090396799933,
+            "error": null,
+            "generated_query": "MATCH e1[Employee] >[friend_of] e2[Employee] >[works_for] c1[Company] >[partner_of] c2[Company]\nRETURN e1"
+        },
+        {
+            "case_id": "test_0013",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which animal is owned by someone who has more than 20000\u20ac in bank?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 32.44701144899955,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH a[Animal] <[has_owner] p[Person] >[bank_account] b[BankAccount] {\n  money > \"20000\"\n}\nRETURN a"
+        },
+        {
+            "case_id": "test_0014",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which animal owner owns animals of different types?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 32.384141892001935,
+            "error": null,
+            "generated_query": "MATCH o[CompanyOwner] >[has_animal] a1[Animal]\nMATCH o >[has_animal] a2[Animal]\nREQUIRE a1 DIFFERENT_FROM a2\nRETURN o"
+        }
+    ]
+}

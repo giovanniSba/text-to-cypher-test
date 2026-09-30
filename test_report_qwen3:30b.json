@@ -1,0 +1,214 @@
+{
+    "summary": {
+        "total_tests": 14,
+        "exact_matches_count": 0,
+        "exact_match_rate": 0.0,
+        "average_db_score": 0.14285714285714285,
+        "average_elapsed_time_ms": 24.721765510071627
+    },
+    "details": [
+        {
+            "case_id": "test_0001",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which vehicles have a previous owner?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 43.63842990400008,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH Vehicle:[]{} >[previous_owner] Person:[]{} RETURN Vehicle"
+        },
+        {
+            "case_id": "test_0002",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own both a vehicle and an animal?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 44.42212358600227,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH p: [Person] >[has_vehicle] v: [Vehicle]\nMATCH p: [Person] >[has_animal] a: [Animal]\nRETURN p"
+        },
+        {
+            "case_id": "test_0003",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which companies are owned by people who own vehicles?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 0,
+            "error": "500 Server Error: Internal Server Error for url: http://localhost:8000/translate?model_id=qwen3%3A30b-a3b&er_model_id=gemma4%3A12b&hypo_model_id=hermes3%3A8b"
+        },
+        {
+            "case_id": "test_0004",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees live in the country where their company is located?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 0,
+            "error": "500 Server Error: Internal Server Error for url: http://localhost:8000/translate?model_id=qwen3%3A30b-a3b&er_model_id=gemma4%3A12b&hypo_model_id=hermes3%3A8b"
+        },
+        {
+            "case_id": "test_0005",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people are friends with company owners?",
+            "exact_match": false,
+            "score": 1.0,
+            "elapsed_time": 62.155362915000296,
+            "error": null,
+            "generated_query": "MATCH c[CompanyOwner] >[friend_of] p[Person]\nRETURN p"
+        },
+        {
+            "case_id": "test_0006",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees work for companies owned by one of their friends?",
+            "exact_match": false,
+            "score": 1.0,
+            "elapsed_time": 60.91920738299814,
+            "error": null,
+            "generated_query": "MATCH e[Employee] >[works_for] c[Company]\nMATCH c[Company] >[company_owner] co[CompanyOwner]\nMATCH e[Employee] >[friend_of] co[CompanyOwner]\nRETURN e"
+        },
+        {
+            "case_id": "test_0007",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own vehicles whose previous owner is one of their friends?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 57.68873271499979,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH P1: [Person] >[has_vehicle] V: [Vehicle]\nMATCH V: [Vehicle] >[previous_owner] P2: [Person]\nREQUIRE P1 friend_of P2\nRETURN P1"
+        },
+        {
+            "case_id": "test_0008",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees have partners working for the same company?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 0,
+            "error": "500 Server Error: Internal Server Error for url: http://localhost:8000/translate?model_id=qwen3%3A30b-a3b&er_model_id=gemma4%3A12b&hypo_model_id=hermes3%3A8b"
+        },
+        {
+            "case_id": "test_0009",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which company owners live in a different country from their company's legal office?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 0,
+            "error": "500 Server Error: Internal Server Error for url: http://localhost:8000/translate?model_id=qwen3%3A30b-a3b&er_model_id=gemma4%3A12b&hypo_model_id=hermes3%3A8b"
+        },
+        {
+            "case_id": "test_0010",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own companies whose legal office is located in the country where one of their friends resides?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 0,
+            "error": "500 Server Error: Internal Server Error for url: http://localhost:8000/translate?model_id=qwen3%3A30b-a3b&er_model_id=gemma4%3A12b&hypo_model_id=hermes3%3A8b"
+        },
+        {
+            "case_id": "test_0011",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own vehicles previously owned by someone working for the same company?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 0,
+            "error": "500 Server Error: Internal Server Error for url: http://localhost:8000/translate?model_id=qwen3%3A30b-a3b&er_model_id=gemma4%3A12b&hypo_model_id=hermes3%3A8b"
+        },
+        {
+            "case_id": "test_0012",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employee are friends of employees of a partner company?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 0,
+            "error": "500 Server Error: Internal Server Error for url: http://localhost:8000/translate?model_id=qwen3%3A30b-a3b&er_model_id=gemma4%3A12b&hypo_model_id=hermes3%3A8b"
+        },
+        {
+            "case_id": "test_0013",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which animal is owned by someone who has more than 20000\u20ac in bank?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 39.58376050800143,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": " ] [ "
+        },
+        {
+            "case_id": "test_0014",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "qwen3:30b-a3b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which animal owner owns animals of different types?",
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 37.69710013000076,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": " ] [ "
+        }
+    ]
+}

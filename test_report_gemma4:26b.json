@@ -1,0 +1,435 @@
+{{
+    "summary": {
+        "total_tests": 14,
+        "exact_matches_count": 0,
+        "exact_match_rate": 0.0,
+        "average_db_score": 0.21428571428571427,
+        "average_elapsed_time_ms": 35.607999491499605
+    },
+    "details": [
+        {
+            "case_id": "test_0001",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which vehicles have a previous owner?",
+            "hypothetical_query": "MATCH v[Vehicle] >[owned_by] p1[Person]\nMATCH v >[previously_owned_by] p2[Person]{fullname: <STRING_VALUE>}\nRETURN v",
+            "extracted_entities": [
+                {
+                    "entity_class": "Vehicle",
+                    "extracted_text": "vehicles"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 37.22240048000094,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH v[Vehicle] >[previous_owner] p[Person] RETURN v"
+        },
+        {
+            "case_id": "test_0002",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own both a vehicle and an animal?",
+            "hypothetical_query": "MATCH p[Person] >[owns] v[Vehicle]\nMATCH p >[owns] a[Animal]\nRETURN p",
+            "extracted_entities": [
+                {
+                    "entity_class": "Person",
+                    "extracted_text": "people"
+                },
+                {
+                    "entity_class": "Vehicle",
+                    "extracted_text": "vehicle"
+                },
+                {
+                    "entity_class": "Animal",
+                    "extracted_text": "animal"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 33.286026655998285,
+            "error": null,
+            "generated_query": "MATCH p[Person] >[has_vehicle] v[Vehicle]\nMATCH p >[has_animal] a[Animal]\nRETURN p"
+        },
+        {
+            "case_id": "test_0003",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which companies are owned by people who own vehicles?",
+            "hypothetical_query": "MATCH c[Company] >[owned_by] p[Person] >[owns] v[Vehicles]\nRETURN c",
+            "extracted_entities": [
+                {
+                    "entity_class": "Company",
+                    "extracted_text": "companies"
+                },
+                {
+                    "entity_class": "CompanyOwner",
+                    "extracted_text": "people"
+                },
+                {
+                    "entity_class": "Vehicle",
+                    "extracted_text": "vehicles"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 33.067769197001326,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH p[CompanyOwner] >[owns_company] c[Company], p >[has_vehicle] v[Vehicle]\nRETURN c"
+        },
+        {
+            "case_id": "test_0004",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees live in the country where their company is located?",
+            "hypothetical_query": "MATCH e[Employee] >[works_at] c[Company]\nMATCH e >[lives_in] co[Country]{name: c.location}\nRETURN e",
+            "extracted_entities": [
+                {
+                    "entity_class": "Employee",
+                    "extracted_text": "employees"
+                },
+                {
+                    "entity_class": "Country",
+                    "extracted_text": "country"
+                },
+                {
+                    "entity_class": "Company",
+                    "extracted_text": "company"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 50.036939265999536,
+            "error": null,
+            "generated_query": "MATCH e[Employee] >[resident_in] a1[Address] >[located_in] c[Country]\nMATCH co[Company] >[has_legal_office_in] a2[Address] >[located_in] c\nRETURN e"
+        },
+        {
+            "case_id": "test_0005",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people are friends with company owners?",
+            "hypothetical_query": "MATCH p[Person] >[friends_with] co[Company_Owner]\nRETURN p",
+            "extracted_entities": [
+                {
+                    "entity_class": "Person",
+                    "extracted_text": "people"
+                },
+                {
+                    "entity_class": "CompanyOwner",
+                    "extracted_text": "company owners"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 29.622705295998458,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH co[CompanyOwner] <-[friend_of]- p[Person]\nRETURN p"
+        },
+        {
+            "case_id": "test_0006",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees work for companies owned by one of their friends?",
+            "hypothetical_query": "MATCH e[Employee] >[works_for] c[Company]\nMATCH f[Person]{fullname: <STRING_VALUE>} >[owns] c2[Company]\nMATCH e -[:knows]-> f\nRETURN e",
+            "extracted_entities": [
+                {
+                    "entity_class": "Employee",
+                    "extracted_text": "employees"
+                },
+                {
+                    "entity_class": "Company",
+                    "extracted_text": "companies"
+                },
+                {
+                    "entity_class": "Person",
+                    "extracted_text": "friends"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 36.33807491999687,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH e:Employee >[works_for] c:Company\nMATCH c >[company_owner] p:CompanyOwner\nMATCH e >[friend_of] p\nRETURN e"
+        },
+        {
+            "case_id": "test_0007",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own vehicles whose previous owner is one of their friends?",
+            "hypothetical_query": "MATCH p[Person] >[owns] v[Vehicles]\nMATCH v >[previously_owned_by] f[Person]{friends: <STRING_VALUE>}\nRETURN p",
+            "extracted_entities": [
+                {
+                    "entity_class": "Person",
+                    "extracted_text": "people"
+                },
+                {
+                    "entity_class": "Vehicle",
+                    "extracted_text": "vehicles"
+                },
+                {
+                    "entity_class": "CompanyOwner",
+                    "extracted_text": "owner"
+                },
+                {
+                    "entity_class": "Person",
+                    "extracted_text": "friends"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 33.7651653110006,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH p1:Person >[has_vehicle] v:Vehicle >[previous_owner] p2:Person, p1:Person >[friend_of] p2:Person\nRETURN p1"
+        },
+        {
+            "case_id": "test_0008",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employees have partners working for the same company?",
+            "hypothetical_query": "MATCH e[Employee] >[partner] p[Partner]\nMATCH p >[works_for] c1[Company]\nMATCH e >[works_for] c2[Company]{name: c1.name}\nRETURN e",
+            "extracted_entities": [
+                {
+                    "entity_class": "Employee",
+                    "extracted_text": "employees"
+                },
+                {
+                    "entity_class": "Employee",
+                    "extracted_text": "partners"
+                },
+                {
+                    "entity_class": "Company",
+                    "extracted_text": "company"
+                }
+            ],
+            "exact_match": false,
+            "score": 1.0,
+            "elapsed_time": 33.306375778000074,
+            "error": null,
+            "generated_query": "MATCH e1[Employee] >[has_relation_with] e2[Employee]\nMATCH e1 >[works_for] c[Company]\nMATCH e2 >[works_for] c\nRETURN e1"
+        },
+        {
+            "case_id": "test_0009",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which company owners live in a different country from their company's legal office?",
+            "hypothetical_query": "MATCH c[Company Owner] >[resides_in] l1[Country]\nMATCH c >[owns] co[Company]{legal_office_location: <STRING_VALUE>}\nREQUIRE l1 DIFFERENT_FROM co\nRETURN c",
+            "extracted_entities": [
+                {
+                    "entity_class": "CompanyOwner",
+                    "extracted_text": "company owners"
+                },
+                {
+                    "entity_class": "Company",
+                    "extracted_text": "company"
+                },
+                {
+                    "entity_class": "Address",
+                    "extracted_text": "legal office"
+                },
+                {
+                    "entity_class": "Country",
+                    "extracted_text": "country"
+                }
+            ],
+            "exact_match": false,
+            "score": 1.0,
+            "elapsed_time": 36.83555913300006,
+            "error": null,
+            "generated_query": "MATCH o[CompanyOwner] >[owns_company] c[Company] >[has_legal_office_in] a1[Address] >[located_in] ct1[Country]\nMATCH o >[resident_in] a2[Address] >[located_in] ct2[Country]\nREQUIRE ct1 DIFFERENT_FROM ct2\nRETURN o"
+        },
+        {
+            "case_id": "test_0010",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own companies whose legal office is located in the country where one of their friends resides?",
+            "hypothetical_query": "MATCH p[Person] >[owns] c[Company] >[has_legal_office_in] co[Country]\nMATCH p >[friends_with] f[Person]{residence_country: co.code}\nRETURN p",
+            "extracted_entities": [
+                {
+                    "entity_class": "CompanyOwner",
+                    "extracted_text": "people"
+                },
+                {
+                    "entity_class": "Company",
+                    "extracted_text": "companies"
+                },
+                {
+                    "entity_class": "Address",
+                    "extracted_text": "legal office"
+                },
+                {
+                    "entity_class": "Country",
+                    "extracted_text": "country"
+                },
+                {
+                    "entity_class": "Person",
+                    "extracted_text": "friends"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 39.311936188998516,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH owner:CompanyOwner >[owns_company] comp:Company >[has_legal_office_in] off:Address >[located_in] cty:Country\nMATCH owner >[friend_of] frd:Person >[resident_in] frd_addr:Address >[located_in] cty\nRETURN owner"
+        },
+        {
+            "case_id": "test_0011",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which people own vehicles previously owned by someone working for the same company?",
+            "hypothetical_query": "MATCH p[Person] >[owns] v[Vehicles]\nMATCH v CONTEXT (v)--(o)previously_owned_by--> p1[Person] >[works_for] c[Company]{name: <STRING_VALUE>}\nREQUIRE p1 SAME_CLASS_OF p\nRETURN p",
+            "extracted_entities": [
+                {
+                    "entity_class": "Person",
+                    "extracted_text": "people"
+                },
+                {
+                    "entity_class": "Vehicle",
+                    "extracted_text": "vehicles"
+                },
+                {
+                    "entity_class": "Employee",
+                    "extracted_text": "someone working for the same company"
+                },
+                {
+                    "entity_class": "Company",
+                    "extracted_text": "company"
+                }
+            ],
+            "exact_match": false,
+            "score": 1.0,
+            "elapsed_time": 37.34003850799854,
+            "error": null,
+            "generated_query": "MATCH v[Vehicle] >[vehicle_owned_by] p1[Person]\nMATCH v >[previous_owner] p2[Employee] >[works_for] c[Company]\nRETURN p1"
+        },
+        {
+            "case_id": "test_0012",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which employee are friends of employees of a partner company?",
+            "hypothetical_query": "MATCH e[Employee] >[friends_with] p1[Employee] >[works_for] c[Company]\nMATCH e >[friends_with] p2[Employee] >[works_for] pc[Partner Company]{name: <STRING_VALUE>}\nRETURN e",
+            "extracted_entities": [
+                {
+                    "entity_class": "Employee",
+                    "extracted_text": "employee"
+                },
+                {
+                    "entity_class": "Employee",
+                    "extracted_text": "employees"
+                },
+                {
+                    "entity_class": "Company",
+                    "extracted_text": "partner company"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 34.33541665600205,
+            "error": null,
+            "generated_query": "MATCH e1[Employee] >[friend_of] e2[Employee] >[works_for] c1[Company] >[partner_of] c2[Company]\nRETURN e1"
+        },
+        {
+            "case_id": "test_0013",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which animal is owned by someone who has more than 20000\u20ac in bank?",
+            "hypothetical_query": "MATCH a[Animal] >[owned_by] p[Person]{bank_balance > <NUM_VALUE>}\nRETURN a",
+            "extracted_entities": [
+                {
+                    "entity_class": "Animal",
+                    "extracted_text": "animal"
+                },
+                {
+                    "entity_class": "Person",
+                    "extracted_text": "someone"
+                },
+                {
+                    "entity_class": "BankAccount",
+                    "extracted_text": "bank"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 32.06542925800022,
+            "error": "500 Server Error:  for url: http://localhost:8082/nems/query/3",
+            "generated_query": "MATCH a[Animal] <[has_owner] p[Person] >[bank_account] b[BankAccount] {\n  money > \"20000\"\n}\nRETURN a"
+        },
+        {
+            "case_id": "test_0014",
+            "file": "cogql-test-queries-wids.json",
+            "models": {
+                "model_id": "gemma4:26b",
+                "er_model_id": "gemma4:12b",
+                "hypo_model_id": "hermes3:8b"
+            },
+            "nl_query": "Which animal owner owns animals of different types?",
+            "hypothetical_query": "MATCH o[Owner] >[owns] a1[Animal]\nMATCH o >[owns] a2[Animal] WHERE a2 != a1\nRETURN o",
+            "extracted_entities": [
+                {
+                    "entity_class": "CompanyOwner",
+                    "extracted_text": "animal owner"
+                },
+                {
+                    "entity_class": "Animal",
+                    "extracted_text": "animals of different types"
+                }
+            ],
+            "exact_match": false,
+            "score": 0.0,
+            "elapsed_time": 31.978156232999027,
+            "error": null,
+            "generated_query": "MATCH o[CompanyOwner] >[has_animal] a1[Animal]\nMATCH o >[has_animal] a2[Animal]\nREQUIRE a1 DIFFERENT_FROM a2\nRETURN o"
+        }
+    ]
+}

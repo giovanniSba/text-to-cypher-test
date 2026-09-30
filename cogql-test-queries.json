@@ -1,0 +1,91 @@
+[
+  {
+    "text": "Which vehicles have a previous owner?",
+    "queries": [
+      "MATCH v[Vehicle] >[previous_owner] p[SUB_CLASS_OF(Person)]\nRETURN v"
+    ]
+  },
+  {
+    "text": "Which people own both a vehicle and an animal?",
+    "queries": [
+      "MATCH p[SUB_CLASS_OF(Person)] >[has_vehicle] v[Vehicle]\nMATCH p >[has_animal] a[SUB_CLASS_OF(Animal)]\nRETURN p",
+      "MATCH a[SUB_CLASS_OF(Animal)] >[has_owner] p[SUB_CLASS_OF(Person)] >[has_vehicle] v[Vehicle]\nRETURN p",
+      "MATCH v[Vehicle] >[vehicle_owned_by] p[SUB_CLASS_OF(Person)] >[has_animal] a[SUB_CLASS_OF(Animal)]\nRETURN p"
+    ]
+  },
+  {
+    "text": "Which companies are owned by people who own vehicles?",
+    "queries": [
+      "MATCH v[Vehicle] >[vehicle_owned_by] o[CompanyOwner] >[owns_company] c[Company]\nRETURN c"
+    ]
+  },
+  {
+    "text": "Which employees live in the country where their company is located?",
+    "queries": [
+      "MATCH e[Employee] >[works_for] cp[Company] >[has_legal_office_in] a1[Address] >[located_in] country[Country]\nMATCH e >[resident_in] a2[Address] >[located_in] country\nRETURN e"
+    ]
+  },
+  {
+    "text": "Which people are friends with company owners?",
+    "queries": [
+      "MATCH p[SUB_CLASS_OF(Person)] >[friend_of] o[CompanyOwner]\nRETURN p"
+    ]
+  },
+  {
+    "text": "Which employees work for companies owned by one of their friends?",
+    "queries": [
+      "MATCH e[Employee] >[works_for] c[Company] >[company_owner] o[CompanyOwner] >[friend_of] e\nRETURN e",
+      "MATCH e[Employee] >[works_for] c[Company] >[company_owner] o[CompanyOwner]\nMATCH e >[friend_of] o\nRETURN e"
+    ]
+  },
+  {
+    "text": "Which people own vehicles whose previous owner is one of their friends?",
+    "queries": [
+      "MATCH p1[SUB_CLASS_OF(Person)] >[has_vehicle] v[Vehicle] >[previous_owner] p2[SUB_CLASS_OF(Person)] >[friend_of] p1\nRETURN p1"
+    ]
+  },
+  {
+    "text": "Which employees have partners working for the same company?",
+    "queries": [
+      "MATCH e1[Employee] >[works_for] c[Company]\nMATCH e1 >[has_relation_with] e2[Employee] >[works_for] c\nRETURN e1"
+    ]
+  },
+  {
+    "text": "Which company owners live in a different country from their company's legal office?",
+    "queries": [
+      "MATCH o[CompanyOwner] >[owns_company] c[Company] >[has_legal_office_in] a1[Address] >[located_in] c1[Country]\nMATCH o >[resident_in] a2[Address] >[located_in] c2[Country]\nREQUIRE c1 DIFFERENT_FROM c2 \nRETURN o"
+    ]
+  },
+  {
+    "text": "Which people own companies whose legal office is located in the country where one of their friends resides?",
+    "queries": [
+      "MATCH o[CompanyOwner] >[owns_company] c[Company] >[has_legal_office_in] a1[Address] >[located_in] c1[Country]\nMATCH p[SUB_CLASS_OF(Person)] >[resident_in] a2[Address] >[located_in] c2[Country]\nMATCH p >[friend_of] o\nREQUIRE c1 SAME_AS c2\nRETURN o",
+      "MATCH o[CompanyOwner] >[owns_company] c[Company] >[has_legal_office_in] a1[Address] >[located_in] c1[Country]\nMATCH p[SUB_CLASS_OF(Person)] >[resident_in] a2[Address] >[located_in] c1\nMATCH p >[friend_of] o\nRETURN o",
+      "MATCH o[CompanyOwner] >[owns_company] c[Company] >[has_legal_office_in] a1[Address] >[located_in] c1[Country]\nMATCH o >[friend_of] p[SUB_CLASS_OF(Person)] >[resident_in] a2[Address] >[located_in] c1\nRETURN o"
+    ]
+  },
+  {
+    "text": "Which people own vehicles previously owned by someone working for the same company?",
+    "queries": [
+      "MATCH v[Vehicle] >[owned_by] e1[Employee] >[works_for] c[Company]\nMATCH e2[Employee] >[works_for] c\nMATCH v >[previous_owner] e2\nRETURN e1"
+    ]
+  },
+  {
+    "text": "Which employee are friends of employees of a partner company?",
+    "queries": [
+      "MATCH e1[Employee] >[works_for] c1[Company]\nMATCH e1 >[friend_of] e2[Employee] >[works_for] c2[Company]\nMATCH c1 >[partner_of] c2\nREQUIRE c1 DIFFERENT_FROM c2\nRETURN e1, e2"
+    ]
+  },
+  {
+    "text": "Which animal is owned by someone who has more than 20000€ in bank?",
+    "queries": [
+      "MATCH a[SUB_CLASS_OF(Animal)] >[has_owner] p[SUB_CLASS_OF(Person)] >[bank_account] b[BankAccount]{money>20000}\nRETURN a"
+    ]
+  },
+  {
+    "text": "Which animal owner owns animals of different types?",
+    "queries": [
+      "MATCH p[SUB_CLASS_OF(Person)] >[has_animal] a1[SUB_CLASS_OF(Animal)]\nMATCH p >[has_animal] a2[SUB_CLASS_OF(Animal)]\nREQUIRE a1 DISJOINT_CLASS_FROM a2\nRETURN p"
+    ]
+  }
+]
